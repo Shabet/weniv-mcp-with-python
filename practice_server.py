@@ -69,6 +69,109 @@ def list_folder() -> list:
     ]
     return folders
 
+@mcp.tool()
+def write_file(file_name: str, content: str) -> str:
+    """
+    c:/test/ 아래에 파일을 생성하고 내용을 작성합니다.
+
+    Parameters
+    ----------
+    file_name: str
+      생성할 파일 이름(확장자 포함)
+
+    content: str
+      파일에 작성할 내용
+
+    Returns
+    -------
+    str
+      파일 작성 결과 메시지
+    """
+    import os
+
+    file_path = os.path.join("c:/test", file_name)
+    try:
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(content)
+        return f"'{file_name}'에 내용이 성공적으로 작성되었습니다."
+    except Exception as e:
+        return f"파일 작성중 오류가 발생하였습니다.: {str(e)}"
+
+@mcp.tool()
+def read_file(file_name: str) -> str:
+    """
+    c:/test/ 아래에 있는 파일의 내용을 읽어옵니다.
+
+    Parameters
+    ----------
+    file_name: str
+      읽어올 파일 이름(확장자 포함)
+
+    Returns
+    -------
+    str
+      파일 내용 또는 오류 메시지
+    """
+    import os
+
+    file_path = os.path.join("c:/test", file_name)
+    if not os.path.exists(file_path):
+        return f"'{file_name}' 파일이 존재하지 않습니다."
+    
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except Exception as e:
+        return f"파일 읽기중 오류가 발생하였습니다.: {str(e)}"
+
+@mcp.tool()
+def append_to_file(file_name: str, content: str) -> str:
+    """
+    c:/test/ 아래에 있는 파일에 내용을 추가합니다.
+
+    Parameters
+    ----------
+    file_name: str
+      내용을 추가할 파일 이름(확장자 포함)
+
+    content: str
+      파일에 추가할 내용
+
+    Returns
+    -------
+    str
+      추가 결과 메시지
+    """
+    import os
+
+    file_path = os.path.join("c:/test", file_name)
+    if not os.path.exists(file_path):
+        return f"'{file_name}' 파일이 존재하지 않습니다."
+    
+    try:
+        with open(file_path, "a", encoding="utf-8") as f:
+            f.write(content)
+        return f"'{file_name}'에 내용이 성공적으로 추가되었습니다."
+    except Exception as e:
+        return f"파일 추가중 오류가 발생하였습니다.: {str(e)}"
+    
+@mcp.tool()
+def list_files() -> list:
+    """
+    c:/test/ 아래 파일 목록을 반환합니다.
+
+    Returns
+    -------
+    list
+      파일 목록
+    """
+    import os
+    folder_path = "c:/test"
+    files = [
+        f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))
+    ]
+    return files
+
 # 서버 실행
 if __name__ == "__main__":
     mcp.run()
