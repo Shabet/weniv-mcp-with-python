@@ -358,6 +358,35 @@ def append_to_excel(file_name: str, new_data: list) -> str:
     except Exception as e:
         return f"엑셀 파일 추가중 오류가 발생하였습니다.: {str(e)}"
 
+@mcp.tool()
+def crawl_url_return_book_name(url: str) -> list:
+    """
+    URL을 입력 받아 해당 URL의 책 제목을 크롤링하여 반환합니다. 각 데이터는 콤마로 연결됩니다.
+    따라서 사용자에서 보여줄 때에는 콤마를 개행하여 보여주세요.
+
+    Parameters
+    ----------
+    url: str
+      크롤링할 웹 페이지 URL
+
+    Returns
+    -------
+    str
+      콤마로 구분된 책 제목 목록
+    """
+    import requests
+    from bs4 import BeautifulSoup
+
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    result = []
+
+    for book in soup.select(".book_name"):
+        result.append(book.text.strip())
+
+    return ",".join(result)
+
 # 서버 실행
 if __name__ == "__main__":
     mcp.run()
